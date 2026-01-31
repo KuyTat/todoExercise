@@ -41,18 +41,22 @@
       </table>
     </div>
     <script>
-      const todo_input = document.getElementById("todo_input");
-      const btn_add = document.getElementById("btn_add");
-      const todoTable = document.getElementById("todoTable");
-      const list = [];
+      let todo_input = document.getElementById("todo_input");
+      let btn_add = document.getElementById("btn_add");
+      let todoTable = document.getElementById("todoTable");
+      // let list = [];
+       let list = JSON.parse(localStorage.getItem("todoList")) || [];
       let index = -1;
       let status = "Add";
-         let b=-1;
       btn_add.value = status;
+        function saveToLocalStorage() {
+        localStorage.setItem("todoList", JSON.stringify(list));
+      }
+      render();
       btn_add.addEventListener("click", function () {
         for (let i = 0 ; i<list.length ; i++) {
           if (list[i].task === todo_input.value && index==i) {
-                        alert("Task already!")
+            alert("Task already!")
                        
           }else if(list[i].task === todo_input.value){
             alert("Task already have !!!");
@@ -74,6 +78,7 @@
         status="Add"
         btn_add.value=status
       }
+        saveToLocalStorage()
         render();
         clearForm();
       });
@@ -123,9 +128,10 @@
       function deleteTask(id) {
         const b = confirm("Are you sure you want to delete task ?")
         if(b){
-                  index = findIndex(id);
+        index = findIndex(id);
         list.splice(index, 1);
         updateNumber()
+        saveToLocalStorage()
         render();
         index = -1;
         }else{
@@ -142,12 +148,14 @@
       function doneTask(id) {
         index = findIndex(id);
         list[index].isDone=true
+        saveToLocalStorage()
         render()
         index=-1
       }
         function undoneTask(id) {
         index = findIndex(id);
         list[index].isDone=false
+        saveToLocalStorage()
         render()
         index=-1
       }
